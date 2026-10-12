@@ -1,0 +1,339 @@
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#160d2c">
+  <title>ملكات نافس | الصفحة الرئيسية</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Tahoma, Arial, sans-serif;
+      color: white;
+      text-align: center;
+      background: linear-gradient(135deg, #160d2c, #101b3d, #082c38);
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 45px 20px;
+      background: linear-gradient(135deg, #21143b, #392354);
+      border-bottom: 2px solid #ffb8e8;
+    }
+
+    h1 {
+      color: #ffb8e8;
+      font-size: clamp(28px, 5vw, 44px);
+      margin: 0 0 12px;
+    }
+
+    h2 {
+      color: #ffd2f1;
+    }
+
+    h3 {
+      color: #ffb8e8;
+    }
+
+    p {
+      line-height: 1.9;
+    }
+
+    .subtitle {
+      color: #e3d9f0;
+      font-size: 18px;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 14px;
+      background: #160d2cf2;
+      border-bottom: 1px solid #ffffff25;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 12px;
+      background: #ffffff12;
+      transition: 0.2s;
+    }
+
+    nav a:hover {
+      background: #ffb8e8;
+      color: #241333;
+    }
+
+    main {
+      width: min(100% - 28px, 1000px);
+      margin: 25px auto;
+    }
+
+    .card {
+      background: #ffffff12;
+      border: 1px solid #ffffff25;
+      border-radius: 22px;
+      padding: 24px;
+      margin: 20px 0;
+      box-shadow: 0 5px 20px #0003;
+    }
+
+    .hero {
+      padding: 35px 22px;
+    }
+
+    .crown {
+      font-size: 55px;
+      margin-bottom: 8px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 25px 0;
+    }
+
+    .feature {
+      background: #ffffff0d;
+      border: 1px solid #ffffff25;
+      border-radius: 18px;
+      padding: 20px 14px;
+    }
+
+    .feature-icon {
+      font-size: 35px;
+    }
+
+    .feature p {
+      color: #e3d9f0;
+      font-size: 14px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 22px;
+      border-radius: 13px;
+      background: #ffb8e8;
+      color: #241333;
+      text-decoration: none;
+      font-weight: bold;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      opacity: 0.9;
+    }
+
+    .btn-secondary {
+      background: #8ee9df;
+    }
+
+    .btn-purple {
+      background: #c5a0ff;
+    }
+
+    .example {
+      background: #ffffff0d;
+      border-right: 4px solid #8ee9df;
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 18px;
+      line-height: 2;
+      text-align: right;
+    }
+
+    .tip {
+      color: #8ee9df;
+      font-weight: bold;
+    }
+
+    footer {
+      padding: 25px 15px;
+      background: #100b20;
+      color: #ffd2f1;
+      margin-top: 35px;
+      line-height: 2;
+    }
+
+    footer p {
+      margin: 5px;
+    }
+
+    @media (max-width: 650px) {
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        gap: 7px;
+      }
+
+      nav a {
+        padding: 9px 11px;
+        font-size: 13px;
+      }
+
+      .card {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="crown">👑</div>
+    <h1>ملكات نافس</h1>
+    <p class="subtitle">
+      تحدّي الرياضيات للصف الثالث المتوسط
+    </p>
+    <p>بالعلم والمثابرة نصنع التميز 🌷</p>
+  </header>
+
+  <nav aria-label="القائمة الرئيسية">
+    <a href="index.html">🏠 الرئيسية</a>
+    <a href="lessons.html">📚 الشروحات</a>
+    <a href="quiz.html">🎡 عجلات الحظ والاختبارات</a>
+    <a href="competition.html">🏆 مسابقة المجموعات</a>
+  </nav>
+
+  <main>
+
+    <section class="card hero">
+      <div class="crown">🌸</div>
+      <h2>أهلًا بكِ يا ملكة الرياضيات!</h2>
+
+      <p>
+        هنا تبدأ رحلتك نحو التفوق في الرياضيات.
+        تعلّمي المفاهيم خطوة بخطوة، وراجعي الأمثلة،
+        ثم اختبري معلوماتك وتنافسي مع زميلاتك
+        للوصول إلى المركز الأول.
+      </p>
+
+      <div class="buttons">
+        <a class="btn" href="lessons.html">
+          ابدئي التعلّم 📚
+        </a>
+
+        <a class="btn btn-secondary" href="quiz.html">
+          اختبري نفسك 🎯
+        </a>
+
+        <a class="btn btn-purple" href="competition.html">
+          ابدئي المنافسة 🏆
+        </a>
+      </div>
+    </section>
+
+    <section>
+      <h2>✨ ماذا ينتظركِ في الموقع؟</h2>
+
+      <div class="features">
+
+        <article class="feature">
+          <div class="feature-icon">📚</div>
+          <h3>شروحات مبسطة</h3>
+          <p>
+            تعلّمي قواعد الرياضيات والمعادلات
+            والدوال والمستقيمات مع أمثلة محلولة.
+          </p>
+          <a class="btn" href="lessons.html">شاهدي الشروحات</a>
+        </article>
+
+        <article class="feature">
+          <div class="feature-icon">🎡</div>
+          <h3>عجلات الحظ</h3>
+          <p>
+            اختاري المستوى والطالبة بطريقة
+            ممتعة تضيف الحماس إلى الحصة.
+          </p>
+          <a class="btn btn-secondary" href="quiz.html">
+            جرّبي العجلات
+          </a>
+        </article>
+
+        <article class="feature">
+          <div class="feature-icon">🏆</div>
+          <h3>تحدّي المجموعات</h3>
+          <p>
+            تنافسي مع ثلاث مجموعات أخرى،
+            واجمعي النقاط للوصول إلى الفوز.
+          </p>
+          <a class="btn btn-purple" href="competition.html">
+            ادخلي المنافسة
+          </a>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>🧮 مثال رياضي سريع</h2>
+
+      <p>
+        إذا كانت المعادلة:
+      </p>
+
+      <div class="example">
+        <strong>٣س + ٢ = ١٧</strong>
+        <p>نطرح ٢ من الطرفين:</p>
+        <strong>٣س = ١٥</strong>
+        <p>نقسم الطرفين على ٣:</p>
+        <strong>س = ٥ ✅</strong>
+      </div>
+
+      <p class="tip">
+        كل مسألة صعبة تصبح أسهل عندما نحلّها خطوة بخطوة! 💗
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>💖 رسالتنا لكِ</h2>
+
+      <p>
+        أنتِ قادرة على التميّز والنجاح.
+        لا تخافي من الخطأ، فكل محاولة تمنحكِ خبرة جديدة.
+        تعلّمي، تدرّبي، وثقي بقدراتكِ.
+      </p>
+
+      <p class="tip">
+        بالتوفيق لكل ملكات نافس! 👑
+      </p>
+    </section>
+
+  </main>
+
+  <footer>
+    <p><strong>👑 ملكات نافس 👑</strong></p>
+    <p>منصة تعليمية للتعلّم والتدريب والمنافسة في الرياضيات</p>
+    <p>✨ بالعلم والمثابرة نصنع التميز ✨</p>
+  </footer>
+
+</body>
+</html>
+```

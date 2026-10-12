@@ -1,0 +1,415 @@
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ملكات نافس | عجلات الحظ والاختبارات</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;padding:15px;font-family:Tahoma,Arial,sans-serif;
+  color:white;text-align:center;
+  background:linear-gradient(135deg,#160d2c,#101b3d,#082c38);
+  line-height:1.8
+}
+.container{max-width:900px;margin:auto}
+h1,h2,h3{color:#ffb8e8}
+header,.card{
+  background:#ffffff12;border:1px solid #ffffff25;
+  border-radius:20px;padding:20px;margin:20px 0;
+  box-shadow:0 5px 20px #0003
+}
+nav{display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
+nav a{
+  text-decoration:none;color:white;background:#ffffff12;
+  border-radius:10px;padding:9px 12px
+}
+nav a:hover{background:#ffb8e8;color:#241333}
+button{
+  font-family:inherit;font-size:15px;font-weight:bold;
+  padding:12px 16px;margin:5px;border:0;border-radius:12px;
+  cursor:pointer;background:#ffb8e8;color:#241333
+}
+button:disabled{opacity:.5;cursor:not-allowed}
+.wheels{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.wheel{
+  width:210px;height:210px;max-width:65vw;max-height:65vw;
+  border-radius:50%;margin:15px auto;
+  display:flex;align-items:center;justify-content:center;
+  border:6px solid #ffb8e8;
+  background:conic-gradient(#805ad5,#2d8b91,#a44e9b,#4a67b7,#805ad5);
+  box-shadow:0 0 20px #ffb8e833;
+  transition:transform 2s cubic-bezier(.15,.75,.15,1)
+}
+.wheel span{
+  width:85px;height:85px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:#160d2c;border:3px solid #8ee9df;
+  font-size:25px;font-weight:bold;color:#ffb8e8
+}
+.level{
+  text-align:right;border-radius:18px;padding:18px;margin:16px 0;
+  background:#ffffff0d;border:2px solid #ffffff22
+}
+.easy{border-color:#8ee9df}
+.medium{border-color:#c5a0ff}
+.hard{border-color:#ff8eae}
+.easy h3{color:#8ee9df}
+.medium h3{color:#c5a0ff}
+.hard h3{color:#ff8eae}
+.start.easy{background:#8ee9df}
+.start.medium{background:#c5a0ff}
+.start.hard{background:#ff8eae}
+#quiz{display:none;text-align:right}
+#timer{
+  text-align:center;font-size:28px;font-weight:bold;
+  color:#8ee9df;margin:12px
+}
+#question{text-align:center;line-height:2}
+.answer{
+  display:block;width:100%;text-align:right;
+  background:#ffffff12;color:white;border:1px solid #ffffff30;
+  margin:8px 0
+}
+.answer.correct{background:#176a50}
+.answer.wrong{background:#873b64}
+#feedback{text-align:center;min-height:30px}
+#score{text-align:center;color:#8ee9df;font-weight:bold}
+#result{text-align:center}
+.small{font-size:13px;color:#e3d9f0}
+footer{padding:20px;color:#ffd2f1}
+@media(max-width:520px){
+  .wheels{grid-template-columns:1fr}
+  .wheel{width:190px;height:190px}
+  header,.card{padding:15px}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+  <h1>👑 ملكات نافس 👑</h1>
+  <p>عجلات الحظ وتحدّي الرياضيات للصف الثالث المتوسط</p>
+  <nav>
+    <a href="index.html">🏠 الرئيسية</a>
+    <a href="lessons.html">📚 الشروحات</a>
+    <a href="competition.html">🏆 مسابقة المجموعات</a>
+  </nav>
+</header>
+
+<section class="card">
+  <h2>🎡 عجلات الاختيار</h2>
+  <p>اختاري المستوى أو اسحبي اسمًا عشوائيًا لطالبة من قائمة مرقمة.</p>
+
+  <div class="wheels">
+    <div>
+      <h3>🎯 عجلة المستوى</h3>
+      <div class="wheel" id="levelWheel"><span id="levelNumber">؟</span></div>
+      <button onclick="spin('level')">اختيار المستوى</button>
+      <p class="small">١ سهل • ٢ متوسط • ٣ صعب</p>
+    </div>
+
+    <div>
+      <h3>👩🏻‍🎓 عجلة الطالبات</h3>
+      <div class="wheel" id="studentWheel"><span id="studentNumber">؟</span></div>
+      <button onclick="spin('student')">اختيار الطالبة</button>
+      <p class="small">الأرقام من ١ إلى ٣٠، ويمكنك تعديل العدد في الكود.</p>
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>🏆 اختاري اختبارك</h2>
+
+  <div class="level easy">
+    <h3>🌸 المستوى الأول — سهل</h3>
+    <p>٢٠ سؤالًا • أساسيات الرياضيات</p>
+    <button class="start easy" onclick="startQuiz(0)">ابدئي المستوى الأول</button>
+  </div>
+
+  <div class="level medium">
+    <h3>💜 المستوى الثاني — متوسط</h3>
+    <p>٢٠ سؤالًا • تطبيق وفهم</p>
+    <button class="start medium" onclick="startQuiz(1)">ابدئي المستوى الثاني</button>
+  </div>
+
+  <div class="level hard">
+    <h3>🔥 المستوى الثالث — صعب</h3>
+    <p>٢٠ سؤالًا • تحدّي التفكير</p>
+    <button class="start hard" onclick="startQuiz(2)">ابدئي المستوى الثالث</button>
+  </div>
+</section>
+
+<section class="card" id="quiz">
+  <h2 id="quizTitle">الاختبار</h2>
+  <div id="timer">02:00</div>
+  <p id="progress"></p>
+  <h3 id="question"></h3>
+  <div id="answers"></div>
+  <div id="feedback" aria-live="polite"></div>
+  <p id="score"></p>
+  <button id="next" onclick="nextQuestion()" disabled>السؤال التالي ←</button>
+  <button id="restart" onclick="hideQuiz()" style="display:none">العودة للمستويات</button>
+</section>
+
+<footer>
+  <p>✨ كل سؤال خطوة نحو التفوق ✨</p>
+</footer>
+</div>
+
+<script>
+/* عجلات الحظ */
+const rotations={level:0,student:0};
+const spinning={level:false,student:false};
+
+function spin(type){
+  if(spinning[type])return;
+  spinning[type]=true;
+
+  const isLevel=type==="level";
+  const wheel=document.getElementById(
+    isLevel?"levelWheel":"studentWheel"
+  );
+  const output=document.getElementById(
+    isLevel?"levelNumber":"studentNumber"
+  );
+
+  const max=isLevel?3:30;
+  const value=Math.floor(Math.random()*max)+1;
+
+  rotations[type]+=1440+Math.random()*720;
+  wheel.style.transform=`rotate(${rotations[type]}deg)`;
+
+  setTimeout(()=>{
+    output.textContent=value;
+    spinning[type]=false;
+
+    if(isLevel){
+      const levels=["","easy","medium","hard"];
+      document.querySelectorAll(".level .start").forEach((b)=>{
+        b.style.outline="none";
+      });
+      const button=document.querySelector(
+        ".start."+levels[value]
+      );
+      if(button)button.style.outline="3px solid white";
+    }
+  },2000);
+}
+
+/* بنك الأسئلة: كل سؤال يتضمن نصًا وأربعة خيارات ورقم الإجابة الصحيحة */
+const bank=[
+[
+["٥ + ٧ = ؟",["١٠","١٢","١٣","١٤"],1],
+["١٥ − ٨ = ؟",["٦","٧","٨","٩"],1],
+["٤ × ٦ = ؟",["٢٠","٢٢","٢٤","٢٦"],2],
+["٣٦ ÷ ٦ = ؟",["٥","٦","٧","٨"],1],
+["س + ٣ = ٩، س = ؟",["٥","٦","٧","١٢"],1],
+["س − ٤ = ٥، س = ؟",["١","٩","٢٠","٨"],1],
+["٢ × ٥ + ١ = ؟",["١١","١٢","١٠","١٥"],0],
+["أي عدد زوجي؟",["٧","٩","١١","١٤"],3],
+["٣² = ؟",["٦","٩","١٢","١٥"],1],
+["نصف ٢٤ هو؟",["١٠","١١","١٢","١٤"],2],
+["−٣ + ٧ = ؟",["−١٠","−٤","٤","١٠"],2],
+["−٤ × ٢ = ؟",["٨","−٨","−٦","٦"],1],
+["كم ضلعًا للمثلث؟",["٢","٣","٤","٥"],1],
+["محيط مربع ضلعه ٥؟",["١٠","١٥","٢٠","٢٥"],2],
+["مساحة مستطيل طوله ٦ وعرضه ٢؟",["٨","١٢","١٦","٢٠"],1],
+["٢س = ١٠، س = ؟",["٢","٤","٥","٨"],2],
+["كسر مكافئ لـ ١/٢؟",["٢/٣","٢/٤","٣/٤","١/٣"],1],
+["٠٫٥ + ٠٫٥ = ؟",["٠٫٥","١","١٫٥","٢"],1],
+["قياس الزاوية القائمة؟",["٤٥°","٦٠°","٩٠°","١٨٠°"],2],
+["٢، ٤، ٦، ٨، ...",["٩","١٠","١١","١٢"],1]
+],
+[
+["٣س + ٢ = ١٧، س = ؟",["٣","٤","٥","٦"],2],
+["−٦ × −٤ = ؟",["−٢٤","٢٤","−١٠","١٠"],1],
+["ميل ص = ٣س + ٢؟",["٢","٣","−٣","٥"],1],
+["ص = ٢س + ١، س = ٤، ص = ؟",["٧","٨","٩","١٠"],2],
+["٥س = ٣٥، س = ؟",["٥","٦","٧","٨"],2],
+["٢³ = ؟",["٦","٨","٩","١٢"],1],
+["مساحة مثلث قاعدته ٨ وارتفاعه ٥؟",["١٣","٢٠","٤٠","٢٦"],1],
+["النسبة ٢:٣ ومجموعهما ٢٥، قيمة الجزء الأول؟",["٥","١٠","١٥","٢٠"],1],
+["٢س − ٦ = ١٠، س = ؟",["٢","٦","٨","١٠"],2],
+["احتمال الصورة في قطعة نقد عادلة؟",["٠","١/٤","١/٢","١"],2],
+["وسيط ٣، ٥، ٧، ٩، ١١؟",["٥","٧","٩","١١"],1],
+["٣/٤ − ١/٤ = ؟",["١/٤","١/٢","٢/٣","١"],1],
+["الميل ٢ والتغير في س هو ٣، التغير في ص؟",["٢","٣","٥","٦"],3],
+["٤(س + ٢) عندما س = ٣؟",["١٤","١٨","٢٠","٢٤"],2],
+["الجذر التربيعي لـ ٨١؟",["٧","٨","٩","١٠"],2],
+["مجموع زوايا المثلث؟",["٩٠°","١٨٠°","٢٧٠°","٣٦٠°"],1],
+["٢٠٪ من عدد تساوي ١٠، العدد؟",["٢٠","٤٠","٥٠","١٠٠"],2],
+["س ÷ ٤ = ٦، س = ؟",["١٠","١٢","٢٠","٢٤"],3],
+["أي نقطة تحقق ص = س + ٢؟",["(١،٣)","(١،٤)","(٢،٢)","(٣،٢)"],0],
+["٢ × ٣² = ؟",["١٢","١٨","٣٦","٨١"],1]
+],
+[
+["٢(س − ٣) = ١٤، س = ؟",["٥","٧","١٠","١١"],2],
+["ص = −٢س + ٥، عندما س = ٣؟",["−١","١","١١","−٦"],0],
+["ميل المستقيم بين (١،٢) و(٣،٦)؟",["١","٢","٣","٤"],1],
+["٣س + ٧ = س + ١٩، س = ؟",["٤","٥","٦","١٣"],2],
+["٣/٥ من عدد تساوي ١٨، العدد؟",["٢٤","٢٨","٣٠","٣٦"],2],
+["(−٣)² − ٤ = ؟",["−١٣","٥","١٣","−٥"],1],
+["محيط مستطيل ٣٠ وطوله ٩، عرضه؟",["٣","٦","٩","١٢"],1],
+["ميل المستقيم الموازي لميل ٤؟",["−٤","١/٤","٤","٠"],2],
+["٥(س + ١) = ٣٠، س = ؟",["٤","٥","٦","٧"],1],
+["احتمال حدث ٠٫٢ يساوي؟",["٢٪","٢٠٪","٥٠٪","٨٠٪"],1],
+["٢س + ٣ عندما س = −٤؟",["−١١","−٥","٥","١١"],0],
+["سعر ٨٠ زاد ٢٥٪، السعر الجديد؟",["٩٠","٩٥","١٠٠","١٠٥"],2],
+["س + ص = ١٠، س = ٤، ص = ؟",["٤","٥","٦","١٤"],2],
+["الجذر التربيعي لـ ١٤٤؟",["١٠","١١","١٢","١٤"],2],
+["٢س + ٣ = ١٥، قيمة س²؟",["٢٤","٢٥","٣٦","٤٩"],2],
+["المسافة بين (٠،٠) و(٣،٤)؟",["٤","٥","٦","٧"],1],
+["ص = ٣س − ٢، عندما س = −٢؟",["−٨","−٤","٤","٨"],0],
+["٢، ٦، ١٢، ٢٠، ٣٠، ...",["٣٦","٤٠","٤٢","٤٨"],2],
+["٤س − ٥ = ٢س + ٩، س = ؟",["٥","٦","٧","٨"],2],
+["مثلث قائم ضلعاه ٦ و٨، الوتر؟",["٩","١٠","١٢","١٤"],1]
+]
+];
+
+let levelIndex=0,qIndex=0,points=0,locked=false;
+let timeLeft=120,timerID=null;
+
+function startQuiz(level){
+  clearInterval(timerID);
+  levelIndex=level;
+  qIndex=0;
+  points=0;
+  timeLeft=120;
+  locked=false;
+
+  const titles=[
+    "🌸 المستوى الأول — سهل",
+    "💜 المستوى الثاني — متوسط",
+    "🔥 المستوى الثالث — صعب"
+  ];
+
+  document.getElementById("quizTitle").textContent=titles[level];
+  document.getElementById("quiz").style.display="block";
+  document.getElementById("restart").style.display="none";
+  document.getElementById("next").style.display="inline-block";
+  document.getElementById("next").disabled=true;
+  document.getElementById("quiz").scrollIntoView({behavior:"smooth"});
+
+  showQuestion();
+  updateTimer();
+
+  timerID=setInterval(()=>{
+    timeLeft--;
+    updateTimer();
+    if(timeLeft<=0)finishQuiz(true);
+  },1000);
+}
+
+function updateTimer(){
+  const m=String(Math.floor(timeLeft/60)).padStart(2,"0");
+  const s=String(timeLeft%60).padStart(2,"0");
+  document.getElementById("timer").textContent=m+":"+s;
+  document.getElementById("timer").style.color=
+    timeLeft<=15?"#ff8eae":"#8ee9df";
+}
+
+function showQuestion(){
+  locked=false;
+  const q=bank[levelIndex][qIndex];
+
+  document.getElementById("progress").textContent=
+    "السؤال "+(qIndex+1)+" من ٢٠";
+  document.getElementById("question").textContent=q[0];
+  document.getElementById("feedback").textContent="";
+  document.getElementById("score").textContent="النقاط: "+points;
+
+  const area=document.getElementById("answers");
+  area.innerHTML="";
+
+  q[1].forEach((answer,i)=>{
+    const b=document.createElement("button");
+    b.className="answer";
+    b.textContent=answer;
+    b.onclick=()=>chooseAnswer(i,b);
+    area.appendChild(b);
+  });
+
+  document.getElementById("next").disabled=true;
+  document.getElementById("next").textContent=
+    qIndex===19?"إنهاء الاختبار 🏆":"السؤال التالي ←";
+}
+
+function chooseAnswer(i,button){
+  if(locked)return;
+  locked=true;
+
+  const q=bank[levelIndex][qIndex];
+  const buttons=document.querySelectorAll(".answer");
+
+  buttons.forEach((b,index)=>{
+    b.disabled=true;
+    if(index===q[2])b.classList.add("correct");
+  });
+
+  if(i===q[2]){
+    points++;
+    document.getElementById("feedback").textContent=
+      "إجابة صحيحة! 🌟";
+  }else{
+    button.classList.add("wrong");
+    document.getElementById("feedback").textContent=
+      "الإجابة الصحيحة: "+q[1][q[2]];
+  }
+
+  document.getElementById("score").textContent="النقاط: "+points;
+  document.getElementById("next").disabled=false;
+}
+
+function nextQuestion(){
+  if(!locked)return;
+
+  if(qIndex<19){
+    qIndex++;
+    showQuestion();
+  }else{
+    finishQuiz(false);
+  }
+}
+
+function finishQuiz(timeEnded){
+  clearInterval(timerID);
+
+  document.getElementById("progress").textContent=
+    timeEnded?"انتهى الوقت!":"اكتمل الاختبار!";
+
+  document.getElementById("question").textContent=
+    "نتيجتك: "+points+" من ٢٠";
+
+  document.getElementById("answers").innerHTML="";
+
+  document.getElementById("feedback").textContent=
+    points>=18?"👑 مذهلة! أداء بطلة!":
+    points>=14?"🌟 ممتازة، استمري!":
+    points>=10?"💗 أحسنتِ، راجعي وحاولي مجددًا!":
+    "🌷 لا تستسلمين، المحاولة القادمة أفضل!";
+
+  document.getElementById("score").textContent=
+    timeEnded?"انتهى الوقت قبل إكمال الأسئلة.":"انتهى الاختبار.";
+
+  document.getElementById("next").style.display="none";
+  document.getElementById("restart").style.display="inline-block";
+}
+
+function hideQuiz(){
+  clearInterval(timerID);
+  document.getElementById("quiz").style.display="none";
+  document.querySelectorAll(".start").forEach(b=>{
+    b.style.display="inline-block";
+    b.style.outline="none";
+  });
+}
+</script>
+
+</body>
+</html>
+```

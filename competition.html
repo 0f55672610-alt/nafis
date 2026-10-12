@@ -1,0 +1,350 @@
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ملكات نافس | مسابقة المجموعات</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;padding:15px;font-family:Tahoma,Arial,sans-serif;
+  color:white;text-align:center;line-height:1.8;
+  background:linear-gradient(135deg,#160d2c,#101b3d,#082c38)
+}
+main{max-width:900px;margin:auto}
+h1,h2,h3{color:#ffb8e8}
+header,.card{
+  background:#ffffff12;border:1px solid #ffffff25;
+  border-radius:20px;padding:20px;margin:20px 0;
+  box-shadow:0 5px 20px #0003
+}
+nav{display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
+nav a{
+  color:white;text-decoration:none;padding:9px 12px;
+  border-radius:10px;background:#ffffff12
+}
+nav a:hover{background:#ffb8e8;color:#241333}
+.teams{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;margin:20px 0
+}
+.team{
+  background:#191d3b;border:2px solid var(--c);
+  border-radius:17px;padding:15px
+}
+.team h3{color:var(--c)}
+.score{font-size:32px;font-weight:bold}
+select{
+  font-family:inherit;font-size:16px;padding:12px;
+  border-radius:12px;background:#29294c;color:white;
+  border:1px solid #8b80c9;max-width:100%
+}
+button{
+  padding:12px 17px;border:0;border-radius:12px;
+  margin:5px;font-family:inherit;font-size:15px;
+  font-weight:bold;cursor:pointer;background:#ffb8e8;
+  color:#241333
+}
+button:disabled{opacity:.5;cursor:not-allowed}
+.answers{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:10px;margin-top:20px
+}
+.answers button{
+  background:#303458;color:white;
+  border:1px solid #8e83c9;line-height:1.7
+}
+.answers button:hover:not(:disabled){background:#514276}
+.hidden{display:none!important}
+#timer{color:#8ee9df;font-size:27px;font-weight:bold}
+#feedback{min-height:30px;font-weight:bold}
+#question{line-height:2}
+#result{line-height:2}
+.winner{color:#ffb8e8}
+.small{font-size:13px;color:#e3d9f0}
+footer{padding:20px;color:#ffd2f1}
+@media(max-width:500px){
+  .answers{grid-template-columns:1fr}
+  .team{padding:10px}
+  header,.card{padding:15px}
+}
+</style>
+</head>
+
+<body>
+<main>
+
+<header>
+  <h1>👑 ملكات نافس 👑</h1>
+  <p>أربع مجموعات، حماس، تفكير، ومنافسة على المركز الأول! 🏆</p>
+  <nav>
+    <a href="index.html">🏠 الرئيسية</a>
+    <a href="lessons.html">📚 الشروحات</a>
+    <a href="quiz.html">🎡 عجلات الحظ والاختبارات</a>
+  </nav>
+</header>
+
+<section class="teams">
+  <div class="team" style="--c:#54efad">
+    <h3>💚 المجموعة الأولى</h3>
+    <div class="score" id="score0">0</div>نقطة
+  </div>
+
+  <div class="team" style="--c:#c5a1ff">
+    <h3>💜 المجموعة الثانية</h3>
+    <div class="score" id="score1">0</div>نقطة
+  </div>
+
+  <div class="team" style="--c:#ff91dc">
+    <h3>💗 المجموعة الثالثة</h3>
+    <div class="score" id="score2">0</div>نقطة
+  </div>
+
+  <div class="team" style="--c:#7edbff">
+    <h3>💙 المجموعة الرابعة</h3>
+    <div class="score" id="score3">0</div>نقطة
+  </div>
+</section>
+
+<section class="card" id="setup">
+  <h2>🎯 مستعدات للتحدي؟</h2>
+  <p>اختاري المجموعة التي سيأتي دورها.</p>
+
+  <select id="teamSelect" aria-label="اختيار المجموعة">
+    <option value="0">المجموعة الأولى 💚</option>
+    <option value="1">المجموعة الثانية 💜</option>
+    <option value="2">المجموعة الثالثة 💗</option>
+    <option value="3">المجموعة الرابعة 💙</option>
+  </select>
+
+  <p>⏱️ لكل سؤال ٣٠ ثانية — الإجابة الصحيحة = ١٠ نقاط</p>
+  <p class="small">كل مجموعة تلعب دورها بالتتابع، وتُحتسب النقاط للإجابة الصحيحة فقط.</p>
+
+  <button onclick="startGame()">ابدئي المنافسة 🚀</button>
+</section>
+
+<section class="card hidden" id="game">
+  <h3 id="turn"></h3>
+  <div id="timer">⏱️ ٣٠</div>
+  <p id="progress"></p>
+  <h2 id="question"></h2>
+  <div class="answers" id="answers"></div>
+  <p id="feedback" aria-live="polite"></p>
+  <button id="next" class="hidden" onclick="nextQuestion()">السؤال التالي ←</button>
+</section>
+
+<section class="card hidden" id="result">
+  <h2>🎉 انتهت المنافسة! 🎉</h2>
+  <h2 id="winner" class="winner"></h2>
+  <h3>📊 الترتيب النهائي</h3>
+  <div id="ranking"></div>
+  <button onclick="resetGame()">إعادة المسابقة 🔄</button>
+</section>
+
+<section class="card">
+  <h2>📺 مراجعة الرياضيات</h2>
+  <p>راجعي دروس الرياضيات واستعدّي لتحدي ملكات نافس!</p>
+  <a href="https://www.youtube.com/results?search_query=عادل+ماث+رياضيات+ثالث+متوسط"
+     target="_blank" rel="noopener noreferrer"
+     style="display:inline-block;background:#ffb8e8;color:#241333;padding:12px 18px;border-radius:12px;text-decoration:none;font-weight:bold">
+    شاهدي دروس عادل ماث ▶
+  </a>
+</section>
+
+<footer>
+  <div>إعداد الطالبة إيلان الظاهري</div>
+  <div>بإشراف المعلمة فدوى الخليفة</div>
+  <div>✨ بالعلم والمثابرة نصنع التميز ✨</div>
+</footer>
+
+</main>
+
+<script>
+const questions = [
+ {q:"إذا كان ٣س = ٢١، فما قيمة س؟",a:["٦","٧","٨","٩"],c:1},
+ {q:"ما ناتج ٥²؟",a:["١٠","١٥","٢٥","٣٠"],c:2},
+ {q:"ما ميل المستقيم ص = ٣س + ٢؟",a:["٢","٣","٥","−٣"],c:1},
+ {q:"ما ناتج ١٢ ÷ ٣ + ٢؟",a:["٢","٤","٦","٨"],c:2},
+ {q:"إذا كان س + ٨ = ١٥، فإن س يساوي؟",a:["٥","٦","٧","٨"],c:2},
+ {q:"ما مساحة مستطيل طوله ٨ وعرضه ٤؟",a:["١٢","٢٤","٣٢","٤٠"],c:2},
+ {q:"ما ناتج ٢(س + ٣) عندما س = ٤؟",a:["١٠","١٢","١٤","١٦"],c:2},
+ {q:"أي عدد مما يأتي أولي؟",a:["٩","١٥","١٧","٢١"],c:2},
+ {q:"إذا كان ٢س − ٤ = ١٠، فما س؟",a:["٥","٦","٧","٨"],c:2},
+ {q:"ما احتمال ظهور صورة عند رمي قطعة نقد متوازنة؟",a:["٠","١/٤","١/٢","١"],c:2},
+ {q:"إذا ص = ٢س + ١ عندما س = ٥، فما ص؟",a:["٩","١٠","١١","١٢"],c:2},
+ {q:"ما قيمة (−٣)²؟",a:["−٩","−٦","٦","٩"],c:3},
+ {q:"ما متوسط الأعداد ٤، ٦، ٨؟",a:["٤","٥","٦","٨"],c:2},
+ {q:"ما محيط مربع طول ضلعه ٧؟",a:["١٤","٢١","٢٨","٤٩"],c:2},
+ {q:"إذا كان ٤س = ٣٦، فإن س يساوي؟",a:["٦","٧","٨","٩"],c:3},
+ {q:"ما ناتج ٢⁴؟",a:["٦","٨","١٦","٣٢"],c:2},
+ {q:"ما العدد الموجب الذي مربعه ٤٩؟",a:["٥","٦","٧","٨"],c:2},
+ {q:"إذا كان س − ٩ = ٣، فإن س؟",a:["٦","٩","١٢","١٥"],c:2},
+ {q:"كم درجة في الزاوية القائمة؟",a:["٤٥°","٦٠°","٩٠°","١٨٠°"],c:2},
+ {q:"ما ناتج ٣(٤ + ٢)؟",a:["١٢","١٥","١٨","٢٤"],c:2}
+];
+
+const teamNames = [
+  "المجموعة الأولى 💚",
+  "المجموعة الثانية 💜",
+  "المجموعة الثالثة 💗",
+  "المجموعة الرابعة 💙"
+];
+
+let order = [];
+let index = 0;
+let currentTeam = 0;
+let timer = null;
+let seconds = 30;
+let locked = false;
+let scores = [0,0,0,0];
+let turnCount = 0;
+let gameRunning = false;
+
+function startGame(){
+  clearInterval(timer);
+
+  scores = [0,0,0,0];
+  scores.forEach((s,i)=>{
+    document.getElementById("score"+i).textContent=s;
+  });
+
+  currentTeam = Number(document.getElementById("teamSelect").value);
+  order = [...questions].sort(()=>Math.random()-0.5);
+  index = 0;
+  turnCount = 0;
+  gameRunning = true;
+
+  document.getElementById("setup").classList.add("hidden");
+  document.getElementById("result").classList.add("hidden");
+  document.getElementById("game").classList.remove("hidden");
+
+  showQuestion();
+}
+
+function showQuestion(){
+  clearInterval(timer);
+  seconds = 30;
+  locked = false;
+
+  document.getElementById("timer").textContent="⏱️ ٣٠";
+  document.getElementById("turn").textContent=teamNames[currentTeam];
+  document.getElementById("progress").textContent=
+    "السؤال "+(index+1)+" من "+order.length;
+  document.getElementById("question").textContent=order[index].q;
+  document.getElementById("feedback").textContent="";
+  document.getElementById("next").classList.add("hidden");
+
+  const box=document.getElementById("answers");
+  box.innerHTML="";
+
+  order[index].a.forEach((answer,i)=>{
+    const b=document.createElement("button");
+    b.textContent=answer;
+    b.onclick=()=>checkAnswer(i,b);
+    box.appendChild(b);
+  });
+
+  timer=setInterval(()=>{
+    seconds--;
+    document.getElementById("timer").textContent="⏱️ "+seconds;
+
+    if(seconds<=0){
+      clearInterval(timer);
+      locked=true;
+      document.getElementById("feedback").textContent="انتهى الوقت! ⏰";
+      document.querySelectorAll("#answers button").forEach(b=>b.disabled=true);
+      document.getElementById("next").classList.remove("hidden");
+    }
+  },1000);
+}
+
+function checkAnswer(choice,button){
+  if(locked)return;
+
+  locked=true;
+  clearInterval(timer);
+
+  document.querySelectorAll("#answers button").forEach(b=>b.disabled=true);
+
+  if(choice===order[index].c){
+    scores[currentTeam]+=10;
+    document.getElementById("score"+currentTeam).textContent=scores[currentTeam];
+    document.getElementById("feedback").textContent="إجابة صحيحة! +١٠ نقاط 🌟";
+    button.style.background="#187d61";
+  }else{
+    document.getElementById("feedback").textContent=
+      "ليست الإجابة الصحيحة. الإجابة الصحيحة: "+order[index].a[order[index].c];
+    button.style.background="#7b315c";
+  }
+
+  document.getElementById("next").classList.remove("hidden");
+}
+
+function nextQuestion(){
+  if(!gameRunning || !locked)return;
+
+  turnCount++;
+
+  if(turnCount>=order.length){
+    finishGame();
+    return;
+  }
+
+  index++;
+  currentTeam=(currentTeam+1)%4;
+  showQuestion();
+}
+
+function finishGame(){
+  clearInterval(timer);
+  gameRunning=false;
+
+  document.getElementById("game").classList.add("hidden");
+  document.getElementById("result").classList.remove("hidden");
+
+  const max=Math.max(...scores);
+  const winners=teamNames.filter((name,i)=>scores[i]===max);
+
+  document.getElementById("winner").textContent=
+    max===0
+      ?"أحسنتن جميعًا على المشاركة! 🎉"
+      :"الفائزة: "+winners.join(" و ")+" 🏆";
+
+  const sorted=scores.map((score,i)=>({
+    name:teamNames[i],
+    score
+  })).sort((a,b)=>b.score-a.score);
+
+  const ranking=document.getElementById("ranking");
+  ranking.innerHTML="";
+
+  sorted.forEach((team,i)=>{
+    const p=document.createElement("p");
+    const medals=["🥇","🥈","🥉","⭐"];
+    const strong=document.createElement("strong");
+    strong.textContent=team.score+" نقطة";
+    p.textContent=medals[i]+" "+team.name+": ";
+    p.appendChild(strong);
+    ranking.appendChild(p);
+  });
+}
+
+function resetGame(){
+  clearInterval(timer);
+  gameRunning=false;
+  scores=[0,0,0,0];
+
+  scores.forEach((s,i)=>{
+    document.getElementById("score"+i).textContent=s;
+  });
+
+  document.getElementById("result").classList.add("hidden");
+  document.getElementById("setup").classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>
+```
